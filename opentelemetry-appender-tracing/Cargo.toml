@@ -13,9 +13,9 @@ rust-version = "1.65"
 [dependencies]
 opentelemetry = { version = "0.21", features = ["logs"] }
 opentelemetry_sdk = { version = "0.21", features = ["logs"] }
-tracing = { version = "0.1.37", default-features = false, features = ["std"] }
-tracing-core = "0.1.31"
-tracing-subscriber = { version = "0.3.0", default-features = false, features = [
+tracing = { version = "0.1.40", default-features = false, features = ["std"] }
+tracing-core = "0.1.32"
+tracing-subscriber = { version = "0.3.18", default-features = false, features = [
     "registry",
     "std",
 ] }
