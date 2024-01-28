@@ -3,6 +3,7 @@ use opentelemetry::{
     Context, KeyValue,
 };
 use std::borrow::Cow;
+use tracing_opentelemetry_instrumentation_sdk::find_current_trace_id;
 use tracing_subscriber::Layer;
 
 const INSTRUMENTATION_LIBRARY_NAME: &str = "opentelemetry-appender-tracing";
@@ -155,48 +156,4 @@ fn map_severity_to_otel_severity(level: &str) -> Severity {
         "ERROR" => Severity::Error,
         _ => Severity::Info, // won't reach here
     }
-}
-
-#[inline]
-#[must_use]
-pub fn find_trace_id(context: &Context) -> Option<String> {
-    use opentelemetry::trace::TraceContextExt;
-
-    let span = context.span();
-    let span_context = span.span_context();
-    span_context
-        .is_valid()
-        .then(|| span_context.trace_id().to_string())
-
-    // #[cfg(not(any(
-    //     feature = "opentelemetry_0_17",
-    //     feature = "opentelemetry_0_18",
-    //     feature = "opentelemetry_0_19"
-    // )))]
-    // let trace_id = span.context().span().span_context().trace_id().to_hex();
-
-    // #[cfg(any(
-    //     feature = "opentelemetry_0_17",
-    //     feature = "opentelemetry_0_18",
-    //     feature = "opentelemetry_0_19"
-    // ))]
-    // let trace_id = {
-    //     let id = span.context().span().span_context().trace_id();
-    //     format!("{:032x}", id)
-    // };
-}
-
-#[inline]
-#[must_use]
-pub fn find_current_context() -> Context {
-    use tracing_opentelemetry::OpenTelemetrySpanExt;
-    // let context = opentelemetry::Context::current();
-    // OpenTelemetry Context is propagation inside code is done via tracing crate
-    tracing::Span::current().context()
-}
-
-#[inline]
-#[must_use]
-pub fn find_current_trace_id() -> Option<String> {
-    find_trace_id(&find_current_context())
 }
