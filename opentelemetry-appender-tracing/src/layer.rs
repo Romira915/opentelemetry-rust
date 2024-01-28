@@ -1,4 +1,7 @@
-use opentelemetry::logs::{LogRecord, Logger, LoggerProvider, Severity};
+use opentelemetry::{
+    logs::{LogRecord, Logger, LoggerProvider, Severity},
+    Context, KeyValue,
+};
 use std::borrow::Cow;
 use tracing_subscriber::Layer;
 
@@ -102,6 +105,24 @@ where
         let mut log_record: LogRecord = LogRecord::default();
         log_record.severity_number = Some(map_severity_to_otel_severity(meta.level().as_str()));
         log_record.severity_text = Some(meta.level().to_string().into());
+        if let Some(ref mut vec) = log_record.attributes {
+            vec.push(("level".into(), meta.level().to_string().into()));
+        } else {
+            let vec = vec![("level".into(), meta.level().to_string().into())];
+            log_record.attributes = Some(vec);
+        }
+        println!("{:?}", find_current_trace_id());
+        if let (Some(vec), Some(trace_id)) =
+            (log_record.attributes.as_mut(), find_current_trace_id())
+        {
+            vec.push(("trace.id".into(), trace_id.into()));
+        }
+        if let (Some(attributes), Some(span_id)) = (
+            log_record.attributes.as_mut(),
+            tracing::Span::current().id(),
+        ) {
+            attributes.push(("span.id".into(), span_id.into_u64().to_string().into()));
+        }
 
         // Not populating ObservedTimestamp, instead relying on OpenTelemetry
         // API to populate it with current time.
@@ -134,4 +155,48 @@ fn map_severity_to_otel_severity(level: &str) -> Severity {
         "ERROR" => Severity::Error,
         _ => Severity::Info, // won't reach here
     }
+}
+
+#[inline]
+#[must_use]
+pub fn find_trace_id(context: &Context) -> Option<String> {
+    use opentelemetry::trace::TraceContextExt;
+
+    let span = context.span();
+    let span_context = span.span_context();
+    span_context
+        .is_valid()
+        .then(|| span_context.trace_id().to_string())
+
+    // #[cfg(not(any(
+    //     feature = "opentelemetry_0_17",
+    //     feature = "opentelemetry_0_18",
+    //     feature = "opentelemetry_0_19"
+    // )))]
+    // let trace_id = span.context().span().span_context().trace_id().to_hex();
+
+    // #[cfg(any(
+    //     feature = "opentelemetry_0_17",
+    //     feature = "opentelemetry_0_18",
+    //     feature = "opentelemetry_0_19"
+    // ))]
+    // let trace_id = {
+    //     let id = span.context().span().span_context().trace_id();
+    //     format!("{:032x}", id)
+    // };
+}
+
+#[inline]
+#[must_use]
+pub fn find_current_context() -> Context {
+    use tracing_opentelemetry::OpenTelemetrySpanExt;
+    // let context = opentelemetry::Context::current();
+    // OpenTelemetry Context is propagation inside code is done via tracing crate
+    tracing::Span::current().context()
+}
+
+#[inline]
+#[must_use]
+pub fn find_current_trace_id() -> Option<String> {
+    find_trace_id(&find_current_context())
 }
