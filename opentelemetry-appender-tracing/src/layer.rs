@@ -112,7 +112,6 @@ where
             let vec = vec![("level".into(), meta.level().to_string().into())];
             log_record.attributes = Some(vec);
         }
-        println!("{:?}", find_current_trace_id());
         if let (Some(vec), Some(trace_id)) =
             (log_record.attributes.as_mut(), find_current_trace_id())
         {

@@ -1,10 +1,10 @@
 [package]
-name = "opentelemetry-appender-tracing"
+name = "opentelemetry-appender-tracing2"
 version = "0.2.0"
 edition = "2021"
 description = "An OpenTelemetry log appender for the tracing crate"
-homepage = "https://github.com/open-telemetry/opentelemetry-rust/tree/main/opentelemetry-appender-tracing"
-repository = "https://github.com/open-telemetry/opentelemetry-rust/tree/main/opentelemetry-appender-tracing"
+homepage = "https://github.com/Romira915/opentelemetry-rust/tree/patch/newrelic-attr/opentelemetry-appender-tracing"
+repository = "https://github.com/Romira915/opentelemetry-rust/tree/patch/newrelic-attr/opentelemetry-appender-tracing"
 readme = "README.md"
 keywords = ["opentelemetry", "log", "logs", "tracing"]
 license = "Apache-2.0"
@@ -23,7 +23,7 @@ once_cell = "1.13.0"
 tracing-opentelemetry-instrumentation-sdk = "0.16.0"
 
 [dev-dependencies]
-opentelemetry-stdout = { path = "../opentelemetry-stdout", features = ["logs"] }
+opentelemetry-stdout = { version = "0.2.0", features = ["logs"] }
 
 [features]
 logs_level_enabled = [
