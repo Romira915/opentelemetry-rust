@@ -11,22 +11,25 @@ license = "Apache-2.0"
 rust-version = "1.75.0"
 
 [dependencies]
-log = { workspace = true, optional = true }
-opentelemetry = { version = "0.27", path = "../opentelemetry", features = ["logs"] }
-tracing = { workspace = true, features = ["std"]}
-tracing-core = { workspace = true }
+log = { version = "0.4.21", optional = true }
+opentelemetry = { version = "0.26", features = ["logs"] }
+tracing = { version = "0.1", features = ["std"] }
+tracing-core = { version = "0.1" }
 tracing-log = { version = "0.2", optional = true }
-tracing-subscriber = { workspace = true, features = ["registry", "std"] }
+tracing-subscriber = { version = "0.3", features = ["registry", "std"] }
+tracing-opentelemetry = { version = "0.27.0", features = [] }
 
 [dev-dependencies]
 log = { workspace = true }
 opentelemetry-stdout = { path = "../opentelemetry-stdout", features = ["logs"] }
-opentelemetry_sdk = { path = "../opentelemetry-sdk", features = ["logs", "testing"]  }
-tracing-subscriber = { workspace = true, features = ["registry", "std", "env-filter"] }
+opentelemetry_sdk = { path = "../opentelemetry-sdk", features = [
+    "logs",
+    "testing",
+] }
 tracing-log = "0.2"
 async-trait = { workspace = true }
 criterion = { workspace = true }
-tokio = { workspace = true, features = ["full"]}
+tokio = { workspace = true, features = ["full"] }
 
 [target.'cfg(not(target_os = "windows"))'.dev-dependencies]
 pprof = { version = "0.13", features = ["flamegraph", "criterion"] }
