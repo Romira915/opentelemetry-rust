@@ -1,10 +1,10 @@
 [package]
-name = "opentelemetry-appender-tracing"
-version = "0.27.0"
+name = "opentelemetry-appender-tracing2"
+version = "0.26.0"
 edition = "2021"
 description = "An OpenTelemetry log appender for the tracing crate"
-homepage = "https://github.com/open-telemetry/opentelemetry-rust/tree/main/opentelemetry-appender-tracing"
-repository = "https://github.com/open-telemetry/opentelemetry-rust/tree/main/opentelemetry-appender-tracing"
+homepage = "https://github.com/Romira915/opentelemetry-rust/tree/patch/trace-id-span-id/opentelemetry-appender-tracing"
+repository = "https://github.com/Romira915/opentelemetry-rust/tree/patch/trace-id-span-id/opentelemetry-appender-tracing"
 readme = "README.md"
 keywords = ["opentelemetry", "log", "logs", "tracing"]
 license = "Apache-2.0"
