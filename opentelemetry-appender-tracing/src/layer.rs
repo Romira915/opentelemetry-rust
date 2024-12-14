@@ -1,6 +1,6 @@
 use opentelemetry::{
     logs::{AnyValue, LogRecord, Logger, LoggerProvider, Severity},
-    InstrumentationScope, Key,
+    Context, InstrumentationScope, Key,
 };
 use std::borrow::Cow;
 use tracing_core::Level;
@@ -174,6 +174,14 @@ where
         log_record.set_event_name(meta.name());
         log_record.set_severity_number(severity_of_level(meta.level()));
         log_record.set_severity_text(meta.level().as_str());
+        if let Some(trace_id) = find_current_trace_id() {
+            log_record.add_attribute("trace.id", trace_id);
+        } else {
+            log_record.add_attribute("trace.id", "none");
+        }
+        if let Some(span_id) = tracing::Span::current().id() {
+            log_record.add_attribute("span.id", span_id.into_u64().to_string());
+        }
         let mut visitor = EventVisitor::new(&mut log_record);
         #[cfg(feature = "experimental_metadata_attributes")]
         visitor.visit_experimental_metadata(meta);
@@ -204,6 +212,25 @@ const fn severity_of_level(level: &Level) -> Severity {
         Level::WARN => Severity::Warn,
         Level::ERROR => Severity::Error,
     }
+}
+
+fn find_current_context() -> Context {
+    use tracing_opentelemetry::OpenTelemetrySpanExt;
+    tracing::Span::current().context()
+}
+
+fn find_current_trace_id() -> Option<String> {
+    find_trace_id(&find_current_context())
+}
+
+fn find_trace_id(context: &Context) -> Option<String> {
+    use opentelemetry::trace::TraceContextExt;
+
+    let span = context.span();
+    let span_context = span.span_context();
+    span_context
+        .is_valid()
+        .then(|| span_context.trace_id().to_string())
 }
 
 #[cfg(test)]

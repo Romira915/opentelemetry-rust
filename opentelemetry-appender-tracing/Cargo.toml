@@ -1,35 +1,35 @@
 [package]
-name = "opentelemetry-appender-tracing"
-version = "0.27.0"
+name = "opentelemetry-appender-tracing2"
+version = "0.27.1"
 edition = "2021"
 description = "An OpenTelemetry log appender for the tracing crate"
-homepage = "https://github.com/open-telemetry/opentelemetry-rust/tree/main/opentelemetry-appender-tracing"
-repository = "https://github.com/open-telemetry/opentelemetry-rust/tree/main/opentelemetry-appender-tracing"
+homepage = "https://github.com/Romira915/opentelemetry-rust/tree/patch/trace-id-span-id/opentelemetry-appender-tracing"
+repository = "https://github.com/Romira915/opentelemetry-rust/tree/patch/trace-id-span-id/opentelemetry-appender-tracing"
 readme = "README.md"
 keywords = ["opentelemetry", "log", "logs", "tracing"]
 license = "Apache-2.0"
 rust-version = "1.75.0"
 
 [dependencies]
-log = { workspace = true, optional = true }
-opentelemetry = { version = "0.27", path = "../opentelemetry", features = ["logs"] }
-tracing = { workspace = true, features = ["std"]}
-tracing-core = { workspace = true }
+log = { version = "0.4.21", optional = true }
+opentelemetry = { version = "0.27.1", features = ["logs"] }
+tracing = { version = "0.1", features = ["std"] }
+tracing-core = { version = "0.1" }
 tracing-log = { version = "0.2", optional = true }
-tracing-subscriber = { workspace = true, features = ["registry", "std"] }
+tracing-subscriber = { version = "0.3", features = ["registry", "std"] }
+tracing-opentelemetry = { version = "0.28.0", features = [] }
 
 [dev-dependencies]
-log = { workspace = true }
-opentelemetry-stdout = { path = "../opentelemetry-stdout", features = ["logs"] }
-opentelemetry_sdk = { path = "../opentelemetry-sdk", features = ["logs", "testing"]  }
-tracing-subscriber = { workspace = true, features = ["registry", "std", "env-filter"] }
+log = { version = "0.4.22" }
+opentelemetry-stdout = { version = "0.27.0", features = ["logs"] }
+opentelemetry_sdk = { version = "0.27.1", features = ["logs", "testing"] }
 tracing-log = "0.2"
-async-trait = { workspace = true }
-criterion = { workspace = true }
-tokio = { workspace = true, features = ["full"]}
+async-trait = { version = "0.1.83" }
+criterion = { version = "0.5.1" }
+tokio = { version = "1.42.0", features = ["full"] }
 
 [target.'cfg(not(target_os = "windows"))'.dev-dependencies]
-pprof = { version = "0.13", features = ["flamegraph", "criterion"] }
+pprof = { version = "0.14.0", features = ["flamegraph", "criterion"] }
 
 [features]
 experimental_metadata_attributes = ["dep:tracing-log"]
