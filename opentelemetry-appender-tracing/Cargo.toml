@@ -1,6 +1,6 @@
 [package]
 name = "opentelemetry-appender-tracing2"
-version = "0.26.0"
+version = "0.27.1"
 edition = "2021"
 description = "An OpenTelemetry log appender for the tracing crate"
 homepage = "https://github.com/Romira915/opentelemetry-rust/tree/patch/trace-id-span-id/opentelemetry-appender-tracing"
@@ -12,12 +12,12 @@ rust-version = "1.75.0"
 
 [dependencies]
 log = { version = "0.4.21", optional = true }
-opentelemetry = { version = "0.26", features = ["logs"] }
+opentelemetry = { version = "0.27.1", features = ["logs"] }
 tracing = { version = "0.1", features = ["std"] }
 tracing-core = { version = "0.1" }
 tracing-log = { version = "0.2", optional = true }
 tracing-subscriber = { version = "0.3", features = ["registry", "std"] }
-tracing-opentelemetry = { version = "0.27.0", features = [] }
+tracing-opentelemetry = { version = "0.28.0", features = [] }
 
 [dev-dependencies]
 log = { workspace = true }
@@ -32,7 +32,7 @@ criterion = { workspace = true }
 tokio = { workspace = true, features = ["full"] }
 
 [target.'cfg(not(target_os = "windows"))'.dev-dependencies]
-pprof = { version = "0.13", features = ["flamegraph", "criterion"] }
+pprof = { version = "0.14.0", features = ["flamegraph", "criterion"] }
 
 [features]
 experimental_metadata_attributes = ["dep:tracing-log"]
