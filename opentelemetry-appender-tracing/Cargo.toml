@@ -20,16 +20,13 @@ tracing-subscriber = { version = "0.3", features = ["registry", "std"] }
 tracing-opentelemetry = { version = "0.28.0", features = [] }
 
 [dev-dependencies]
-log = { workspace = true }
-opentelemetry-stdout = { path = "../opentelemetry-stdout", features = ["logs"] }
-opentelemetry_sdk = { path = "../opentelemetry-sdk", features = [
-    "logs",
-    "testing",
-] }
+log = { version = "0.4.22" }
+opentelemetry-stdout = { version = "0.27.0", features = ["logs"] }
+opentelemetry_sdk = { version = "0.27.1", features = ["logs", "testing"] }
 tracing-log = "0.2"
-async-trait = { workspace = true }
-criterion = { workspace = true }
-tokio = { workspace = true, features = ["full"] }
+async-trait = { version = "0.1.83" }
+criterion = { version = "0.5.1" }
+tokio = { version = "1.42.0", features = ["full"] }
 
 [target.'cfg(not(target_os = "windows"))'.dev-dependencies]
 pprof = { version = "0.14.0", features = ["flamegraph", "criterion"] }
